@@ -1,6 +1,6 @@
 {
   "name": "dowellchat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,5 +25,13 @@
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.8"
+  },
+  "main": "./dist/dowellchat.umd.js",
+  "module": "./dist/dowellchat.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/dowellchat.es.js",
+      "require": "./dist/dowellchat.umd.js"
+    }
   }
 }
