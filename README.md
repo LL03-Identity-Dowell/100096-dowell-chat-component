@@ -18,7 +18,7 @@ This documentation provides an overview and usage guide for the React Chat App, 
     
 3. Include the following file in your `tailwind.config.js`
     ```
-    './node_modules/dowellchatvv/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/dowellchat/**/*.{vue,js,ts,jsx,tsx}',
     ```
     
     - Then the `tailwind.config.js` file might look like:
@@ -27,7 +27,7 @@ This documentation provides an overview and usage guide for the React Chat App, 
         module.exports = {
           content: ["./index.html",
           "./src/**/*.{js,ts,jsx,tsx}",
-          './node_modules/dowellchatvv/**/*.{vue,js,ts,jsx,tsx}',
+          './node_modules/dowellchat/**/*.{vue,js,ts,jsx,tsx}',
         ],
           theme: {
             extend: {},
