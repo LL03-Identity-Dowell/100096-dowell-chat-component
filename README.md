@@ -2,7 +2,7 @@
 
 This documentation provides an overview and usage guide for the React Chat App, a simple chat application developed using React. The app includes a chat button on the main page that, when clicked, opens a chat modal powered by the DowellChatBox component.
 
-## Installation / How to run
+## Installation
 
 1. You can install DowellChat via npm or yarn:
 
@@ -13,30 +13,95 @@ This documentation provides an overview and usage guide for the React Chat App, 
     ```bash
     yarn add dowellchat
     ```
-2. Install Tailwindcss, use the following link for more reference:
-    * https://tailwindcss.com/
-    
-3. Include the following file in your `tailwind.config.js`
-    ```
-    './node_modules/dowellchat/**/*.{vue,js,ts,jsx,tsx}',
-    ```
-    
-    - Then the `tailwind.config.js` file might look like:
-        ```
-        /** @type {import('tailwindcss').Config} */
-        module.exports = {
-          content: ["./index.html",
-          "./src/**/*.{js,ts,jsx,tsx}",
-          './node_modules/dowellchat/**/*.{vue,js,ts,jsx,tsx}',
-        ],
-          theme: {
-            extend: {},
-          },
-          plugins: [],
-        }
-        ```
+2. Import the DowellChat component and useState hook in your React component:
+      ```bash
+      import DowellChat from "dowellchat";
+      ```
+
+## USAGE
+
+1. Define Custom Styles
+Define custom CSS styles for positioning the chat component within your application
+
+      ```js
+      const styles = {
+        customPositioning: {
+          position: 'fixed',
+          bottom: '1.25rem',
+          left: '1.5rem',
+          marginLeft: '0.75rem',
+          zIndex: '50',
+        },
+      }
+      ```
+
+2. Create App Component
+Create a functional component (e.g., App) to manage the DowellChat component:
+
+      ```js
+      function App() {
+        const [message, setMessage] = useState(
+          [{sender: "user", message: "Hello, I am a user", time: "12:00"}, 
+          {sender: "bot", message: "Hello, I am a bot", time: "12:01"},
+        ]); // Initialize with initial message state
+
+        const changeMessage = (msg) => {
+          setMessage([...message, msg]);
+        };
+
+        return (
+          <>
+            <DowellChat
+              position={styles.customPositioning}
+              message={message}
+              changeMessage={changeMessage}
+            />
+          </>
+        );
+      }
+
+      ```
 
 
+# Example
+
+```js
+import { useState } from 'react';
+import DowellChat from 'dowellchat';
+
+const styles = {
+  customPositioning: {
+    position: 'fixed',
+    bottom: '1.25rem',
+    left: '1.5rem',
+    marginLeft: '0.75rem',
+    zIndex: '50',
+  },
+};
+
+function App() {
+  const [message, setMessage] = useState([]);
+
+  const changeMessage = (msg) => {
+    setMessage([...message, msg]);
+  };
+
+  return (
+    <>
+      <DowellChat
+        position={styles.customPositioning}
+        message={message}
+        changeMessage={changeMessage}
+      />
+    </>
+  );
+}
+
+export default App;
+
+```
+
+<!-- 
 # DoWellChat Component
 ## Overview
 The DoWellChat component renders a button that toggles a modal containing the DowellChat component.
@@ -100,4 +165,4 @@ export default ChatPage;
   - `ContainerPosition`: The positioning style of the DowellChatBox component.
   - `inputStyle`: The styling applied to the input field within the DowellChatBox component.
   - `buttonStyle`: The styling applied to the send button within the DowellChatBox component.
-
+ -->
