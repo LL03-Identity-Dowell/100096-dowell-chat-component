@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoIosSend } from "react-icons/io";
+import ChatMessage from "./components/ChatMessage";
+import styles from "./DowellChatBoxStyle.jsx";
 
 /**
  * Functional component representing the DowellChatBox component.
@@ -11,16 +13,38 @@ import { IoIosSend } from "react-icons/io";
  * @returns {JSX.Element} The rendered DowellChatBox component containing a chat interface.
  */
 
-const DowellChatBox = ({ title, ContainerPosition, inputStyle, buttonStyle }) => {
+const DowellChatBox = ({
+  title,
+  message,
+  changeMessage,
+  ContainerPosition,
+  inputStyle,
+  buttonStyle,
+  className,
+}) => {
   const [textMessage, setTextMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  //   const inputValue = useRef(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Function to scroll to the bottom of the container
+    const scrollToBottom = () => {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    };
+
+    // Scroll to bottom whenever items change
+    scrollToBottom();
+  }, [message]);
 
   const sendTextMessage = () => {
     if (textMessage.trim() !== "") {
-      setMessages([...messages, textMessage]);
-      setTextMessage("");
+      const time = new Date().toLocaleTimeString();
+      changeMessage({
+        sender: "user",
+        message: textMessage,
+        time: time,
+      });
     }
+    setTextMessage("");
   };
 
   const handleKeyPress = (e) => {
@@ -31,30 +55,40 @@ const DowellChatBox = ({ title, ContainerPosition, inputStyle, buttonStyle }) =>
 
   return (
     <div
-      className={`${ContainerPosition} bg-white flex flex-col justify-center items-center md:w-80 p-2 space-y-5 shadow-lg rounded-lg border-2 border-solid`}
+      className={className}
+      style={{ ...styles.dowellContainer, ...ContainerPosition }}
     >
-      <h5 className=''>{title} </h5>
-      <div className='border-solid w-64 rounded-md h-60 overflow-y-auto border-2 border-[#f4f4f4] space-y-2 p-2'>
-        {React.Children.toArray(
-          messages.map((message) => (
-            <div className='bg-[#f4f4f4] p-1.5 rounded-md'>{message}</div>
-          ))
-        )}
+      <h5 style={styles.chatTitle}>Dowell Customer Support</h5>
+      <div style={styles.messageContainer} ref={containerRef}>
+        {message &&
+          message.map((msg, index) => (
+            <ChatMessage
+              sender={msg.sender}
+              message={msg.message}
+              time={msg.time}
+              key={index}
+            />
+          ))}
       </div>
-      <div className='flex  flex-col md:flex-row gap-2'>
+
+      <div style={styles.inputContainer}>
         <input
-          type='text'
+          type="text"
           value={textMessage}
           onChange={(e) => setTextMessage(e.target.value)}
-          className={`${inputStyle}`}
+          style={{ ...styles.inputField, ...inputStyle }}
           onKeyUp={handleKeyPress}
+          placeholder="Type a message"
         />
-
-        <button className={`${buttonStyle}`} onClick={sendTextMessage}>
+        <button
+          style={{ ...styles.sendButton, ...buttonStyle }}
+          onClick={sendTextMessage}
+        >
           <IoIosSend size={30} />
         </button>
       </div>
     </div>
   );
 };
+
 export default DowellChatBox;
