@@ -1,6 +1,6 @@
 {
   "name": "dowellchat",
-  "version": "1.0.4",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
