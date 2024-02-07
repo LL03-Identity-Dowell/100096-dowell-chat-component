@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DowellChatBox from "../Chat/DowellChatBox";
+import styles from './DowellChatStyles.jsx'
 
 /**
  * Functional component representing the DowellChat component.
@@ -12,32 +13,71 @@ import DowellChatBox from "../Chat/DowellChatBox";
  * @returns {JSX.Element} The rendered DowellChat component containing a button to toggle the modal.
  */
 
-const DowellChat = ({ position, title, ContainerPosition, inputStyle, buttonStyle }) => {
+const DowellChat = ({
+  position,
+  message,
+  changeMessage,
+  title,
+  ContainerPosition,
+  inputStyle,
+  buttonStyle,
+  className
+}) => {
   const [modal, setModal] = useState(false);
+
   const toggleModal = () => {
     setModal(!modal);
   };
+
+  const [rightPosition, setRightPosition] = useState('16px');
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setRightPosition('3rem'); // On large screens and up
+      } else if (window.innerWidth >= 768) {
+        setRightPosition('2.5rem'); // On medium screens and up
+      } else {
+        setRightPosition('2rem'); // On small screens
+      }
+    };
+
+    handleResize(); // Initial call to set the correct right position
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className={`${position}`}>
-      <button
-        className={`${modal ? "bg-red-300" : "bg-blue-300"} p-3 rounded-full`}
-        onClick={toggleModal}
-      >
-        chat
-      </button>
+    <div  style={{...position }} className = {className}>
       {modal && (
-          <DowellChatBox
+        <DowellChatBox
           title={title ?? 'Dowell Customer Support'}
-          ContainerPosition={ContainerPosition ?? "fixed bottom-16 left-16 sm:right-16 md:right-24 lg:right-28"}
-          inputStyle={ inputStyle ??
-            "rounded-lg h-10 appearance-none bg-transparent border text-gray-700 px-1 focus:outline-none"
+          message = {message}
+          changeMessage = {changeMessage}
+          ContainerPosition={
+            ContainerPosition ??
+            {...styles.ContainerPosition, left:rightPosition}
           }
-          buttonStyle={ buttonStyle ??
-            "rounded-lg border-4 border-double border-white bg-blue-300 py-1 px-2 h-10"
+          inputStyle={
+            inputStyle ??
+            styles.inputStyle
+          }
+          buttonStyle={
+            buttonStyle ??
+            styles.buttonStyle
           }
         />
       )}
+      <button
+        style={{...styles.dowellChatButton , ...(modal ? styles.dowellChatButtonModal : styles.dowellChatButtonDefault)}}
+
+        onClick={toggleModal}
+      >
+        Chat
+      </button>
     </div>
   );
 };
+
 export default DowellChat;
